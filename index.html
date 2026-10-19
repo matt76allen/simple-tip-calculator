@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="calculator.js" defer></script>
     <script src="app.js" defer></script>
+    <script src="share.js" defer></script>
   </head>
   <body>
     <main>
@@ -58,6 +59,18 @@
         <p>Calculate your tip and total: enter your bill, then use the arrows to move a row down or up to the next whole dollar or percentage point. The other values update together, and your bill stays fixed.</p>
         <p class="privacy-note">Just the numbers. No sign-up, no fuss.</p>
       </aside>
+      <section class="share-section" aria-label="Share this calculator">
+        <button id="share-calculator" class="share-button" type="button" aria-controls="share-fallback" aria-expanded="false">Share this calculator</button>
+        <div id="share-fallback" hidden>
+          <p>Share the calculator with a link.</p>
+          <button id="copy-link" class="share-button" type="button">Copy Link</button>
+        </div>
+        <p id="share-status" class="share-status" role="status"></p>
+        <div id="manual-copy" hidden>
+          <label for="share-url">Select and copy this link:</label>
+          <input id="share-url" type="text" value="https://simpletipcalculator.com/" readonly spellcheck="false">
+        </div>
+      </section>
       <noscript><p class="noscript">Please enable JavaScript to use the calculator.</p></noscript>
     </main>
   </body>

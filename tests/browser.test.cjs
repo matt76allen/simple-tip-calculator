@@ -26,7 +26,7 @@ test('calculator works with typing, keyboard, touch, and a narrow screen', async
       assert.equal(await page.locator('body').evaluate(el => el.scrollWidth <= window.innerWidth), true);
     }
     await check('20%', '—', '—');
-    assert.equal(await page.locator('input').count(), 1);
+    assert.equal(await page.locator('.calculator input').count(), 1);
     assert.deepEqual(await page.locator('.result-label').allTextContents(), ['Tip Percentage', 'Tip Amount', 'Total Including Tip']);
     assert.equal(await page.locator('button:disabled').count(), 6);
     await bill.fill('50');

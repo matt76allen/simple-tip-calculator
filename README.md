@@ -22,6 +22,7 @@ Money is calculated in integer cents. The percentage is retained as an exact fra
 - `styles.css`: responsive teal, white, and charcoal styling.
 - `calculator.js`: calculation and validation rules, independent of the page.
 - `app.js`: connects the bill and arrows to the calculator.
+- `share.js`: shares only the website link, with clipboard and manual-copy fallbacks.
 
 ## Verify
 
@@ -34,9 +35,11 @@ node --test tests/calculator.test.cjs
 An optional browser test checks typing, display, keyboard, touch, validation, and mobile layout. In the prepared cloud environment, Playwright and Chromium are already available. With the local server running:
 
 ```sh
-node --test tests/browser.test.cjs
+node --test tests/browser.test.cjs tests/share.test.cjs
 ```
 
 For another machine, install Playwright separately and set `CHROMIUM_PATH` if your Chromium executable is elsewhere. The website itself has no package dependencies.
+
+Sharing tests simulate browser API success, cancellation, and failure. Test the real device sharing panel on the published HTTPS site too; browser support and embedded-preview permissions vary. Sharing always uses `https://simpletipcalculator.com/`, never bill or tip values.
 
 The intended future domain is simpletipcalculator.com. Nothing here publishes the site or connects a domain.

@@ -57,6 +57,17 @@ output { display: block; font-size: clamp(1.6rem, 7vw, 2rem); font-weight: 650; 
 .explanation h2 { margin: 0 0 9px; font-size: 0.88rem; font-weight: 650; }
 .explanation p { margin: 0; font-size: 0.82rem; line-height: 1.65; color: #566963; }
 .explanation .privacy-note { margin-top: 18px; font-size: 0.75rem; color: #62776e; }
+.share-section { margin: 24px 18px 0; text-align: center; }
+.share-button { min-height: 46px; padding: 11px 20px; border: 1px solid #cfdfd7; border-radius: 12px; background: #f0f6f3; color: #126b63; font: inherit; font-size: 0.85rem; font-weight: 650; cursor: pointer; touch-action: manipulation; }
+@media (hover: hover) { .share-button:hover:enabled { background: #dbece4; border-color: #82b5a6; } }
+.share-button:focus-visible, #share-url:focus-visible { outline: 3px solid #126b63; outline-offset: 3px; }
+.share-button:active:enabled { background: #badccd; }
+.share-button:disabled { opacity: 0.5; cursor: default; }
+#share-fallback p, .share-status, #manual-copy label { color: #566963; font-size: 0.82rem; line-height: 1.6; }
+.share-status { margin: 10px 0 0; }
+.share-status:empty { margin: 0; }
+#manual-copy label { display: block; margin-top: 10px; }
+#share-url { width: 100%; min-width: 0; margin-top: 6px; padding: 12px 8px; border: 1px solid #b6cec6; border-radius: 8px; background: #fcfefd; color: #243532; font: inherit; font-size: 0.85rem; text-align: center; }
 .noscript { color: #a23228; text-align: center; }
 @media (max-width: 360px) {
   main { width: calc(100% - 24px); padding-top: 28px; }
