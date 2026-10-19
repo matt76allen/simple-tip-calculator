@@ -23,6 +23,8 @@ Money is calculated in integer cents. The percentage is retained as an exact fra
 - `calculator.js`: calculation and validation rules, independent of the page.
 - `app.js`: connects the bill and arrows to the calculator.
 - `share.js`: shares only the website link, with clipboard and manual-copy fallbacks.
+- `privacy.html` and `terms.html`: the site's privacy policy and terms, with shared responsive styling.
+- `footer.js`: keeps the copyright year current on all three pages.
 
 ## Verify
 
@@ -42,4 +44,4 @@ For another machine, install Playwright separately and set `CHROMIUM_PATH` if yo
 
 Sharing tests simulate browser API success, cancellation, and failure. Test the real device sharing panel on the published HTTPS site too; browser support and embedded-preview permissions vary. Sharing always uses `https://simpletipcalculator.com/`, never bill or tip values.
 
-The intended future domain is simpletipcalculator.com. Nothing here publishes the site or connects a domain.
+The public site is simpletipcalculator.com. The footer links to the policy pages and an optional external Buy Me a Coffee page; no payment widget is embedded. Changes pushed to `main` are deployed through the connected Vercel project.
