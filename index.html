@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#126b63">
-    <meta name="description" content="A simple, free tip calculator. Enter your bill, then adjust the tip percentage, tip amount, or total with easy whole-number steps.">
+    <meta name="description" content="Use our free simple tip calculator to calculate your tip and total instantly. Enter your bill, then easily adjust the tip percentage, tip amount, or total.">
     <title>Simple Tip Calculator</title>
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="styles.css">
@@ -25,8 +25,11 @@
         <div class="bill-section">
           <label for="bill">Bill Amount</label>
           <div class="bill-box">
-            <span class="currency" aria-hidden="true">$</span>
-            <input id="bill" type="text" inputmode="decimal" placeholder="e.g. 50.00" autocomplete="off" spellcheck="false" aria-describedby="bill-error" enterkeyhint="done">
+            <div class="bill-entry">
+              <span class="currency" aria-hidden="true">$</span>
+              <span class="bill-measure is-placeholder" aria-hidden="true">e.g. 50.00</span>
+              <input id="bill" type="text" inputmode="decimal" placeholder="e.g. 50.00" autocomplete="off" spellcheck="false" aria-describedby="bill-error" enterkeyhint="done">
+            </div>
           </div>
           <p id="bill-error" class="error" aria-live="polite"></p>
         </div>
@@ -51,8 +54,8 @@
       </section>
 
       <aside class="explanation" aria-label="How to use the calculator">
-        <h2>A small step. A simple total.</h2>
-        <p>Enter your bill, then use the arrows to move a row down or up to the next whole dollar or percentage point. The other values update together, and your bill stays fixed.</p>
+        <h2>A simple tip calculator. An easy total.</h2>
+        <p>Calculate your tip and total: enter your bill, then use the arrows to move a row down or up to the next whole dollar or percentage point. The other values update together, and your bill stays fixed.</p>
         <p class="privacy-note">Just the numbers. No sign-up, no fuss.</p>
       </aside>
       <noscript><p class="noscript">Please enable JavaScript to use the calculator.</p></noscript>
