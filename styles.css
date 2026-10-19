@@ -27,7 +27,7 @@ h1 { font-size: clamp(1.65rem, 6.5vw, 2rem); letter-spacing: -0.055em; line-heig
    Both occupy the same grid cell; long amounts stay within the bill box. */
 .bill-measure { grid-column: 2; grid-row: 1; visibility: hidden; white-space: pre; pointer-events: none; }
 #bill { grid-column: 2; grid-row: 1; display: block; width: 0; min-width: 100%; padding: 0; border: 0; background: transparent; color: #243532; font: inherit; letter-spacing: inherit; text-align: left; outline: none; }
-#bill::placeholder, .bill-measure.is-placeholder { font-size: 0.73em; font-weight: 400; letter-spacing: -0.02em; }
+#bill::placeholder, .bill-measure.is-placeholder { font-size: inherit; font-weight: inherit; letter-spacing: inherit; }
 #bill::placeholder { color: #60776e; opacity: 1; }
 .error { color: #a23228; font-size: 0.8rem; line-height: 1.4; min-height: 1.4em; margin: 8px 0 0; text-align: center; }
 .results { padding: 0 12px 12px; }
