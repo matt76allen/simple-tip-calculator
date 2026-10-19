@@ -1,6 +1,9 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { chromium } = require('playwright');
+const { createServer } = require('node:http');
+const { readFile } = require('node:fs/promises');
+const { resolve, extname } = require('node:path');
 const base = 'http://127.0.0.1:8000/';
 
 test('offline calculator and home-screen installation', async t => {
@@ -16,6 +19,7 @@ test('offline calculator and home-screen installation', async t => {
         await page.goto(base + 'icon.svg');
         await page.evaluate(async () => {
           await caches.open('simple-tip-calculator-v0');
+          await caches.open('simple-tip-calculator-v1');
           await caches.open('unrelated-cache');
         });
         await page.goto(base);
@@ -29,6 +33,7 @@ test('offline calculator and home-screen installation', async t => {
         assert.ok(coffee.y >= install.y + install.height);
         const names = await page.evaluate(() => caches.keys());
         assert.equal(names.includes('simple-tip-calculator-v0'), false);
+        assert.equal(names.includes('simple-tip-calculator-v1'), false);
         assert.equal(names.includes('unrelated-cache'), true);
         const manifest = await page.evaluate(async () => (await fetch('manifest.webmanifest')).json());
         assert.equal(manifest.name, 'Simple Tip Calculator');
@@ -61,12 +66,52 @@ test('offline calculator and home-screen installation', async t => {
           await page.getByRole('link', { name: 'Back to Simple Tip Calculator' }).click();
         }
         const cached = await page.evaluate(async () => {
-          const cache = await caches.open('simple-tip-calculator-v1');
+          const cache = await caches.open('simple-tip-calculator-v2');
           return (await cache.keys()).map(request => new URL(request.url).pathname);
         });
-        assert.equal(cached.length, 15);
+        assert.equal(cached.length, 16);
+        assert.ok(cached.includes('/analytics.js'));
         assert.deepEqual(errors, []);
       } finally { await context.close(); }
+    });
+
+    await t.test('a slow online response wins over cached files; failed network falls back to the saved response', async () => {
+      const root = resolve(__dirname, '..');
+      let slow = false;
+      const server = createServer(async (request, response) => {
+        try {
+          const pathname = new URL(request.url, 'http://localhost').pathname;
+          const file = resolve(root, pathname === '/' ? 'index.html' : pathname.slice(1));
+          if (!file.startsWith(root + '/')) { response.writeHead(403).end(); return; }
+          let data = await readFile(file);
+          if (slow && pathname === '/styles.css') {
+            // The old four-second timeout would return the stale cached CSS.
+            await new Promise(resolve => setTimeout(resolve, 5100));
+            data = Buffer.concat([data, Buffer.from('\n/* fresh slow network response */')]);
+          }
+          const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.png': 'image/png', '.webmanifest': 'application/manifest+json' };
+          response.writeHead(200, { 'Content-Type': types[extname(file)] || 'application/octet-stream' });
+          response.end(data);
+        } catch { response.writeHead(404).end(); }
+      });
+      await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+      const context = await browser.newContext();
+      try {
+        const page = await context.newPage();
+        await page.goto(`http://127.0.0.1:${server.address().port}/`);
+        await page.evaluate(() => navigator.serviceWorker.ready);
+        await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
+        slow = true;
+        const fresh = await page.evaluate(async () => (await fetch('styles.css?slow-check')).text());
+        assert.ok(fresh.includes('fresh slow network response'));
+        await context.setOffline(true);
+        const offline = await page.evaluate(async () => (await fetch('styles.css?offline-check')).text());
+        assert.equal(offline, fresh);
+      } finally {
+        await context.close();
+        server.closeAllConnections();
+        await new Promise(resolve => server.close(resolve));
+      }
     });
 
     async function installPage(userAgent, run) {

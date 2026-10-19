@@ -1,10 +1,10 @@
 const CACHE_PREFIX = "simple-tip-calculator-";
-const CACHE_NAME = `${CACHE_PREFIX}v1`;
+const CACHE_NAME = `${CACHE_PREFIX}v2`;
 // Cache only this explicit list of public files, never calculator values,
 // payment pages, or other external requests.
 const APP_FILES = [
   "./", "./index.html", "./privacy.html", "./terms.html", "./styles.css",
-  "./calculator.js", "./app.js", "./share.js", "./footer.js", "./pwa.js",
+  "./calculator.js", "./app.js", "./share.js", "./footer.js", "./pwa.js", "./analytics.js",
   "./icon.svg", "./manifest.webmanifest", "./icons/icon-192.png",
   "./icons/icon-512.png", "./icons/apple-touch-icon.png"
 ];
@@ -28,11 +28,10 @@ self.addEventListener("activate", event => {
 });
 
 async function networkOrOfflineCopy(request, key) {
-  const controller = new AbortController();
-  // A saved copy also helps on a connection that stalls rather than fails.
-  const timeout = setTimeout(() => controller.abort(), 4000);
   try {
-    const response = await fetch(request, { signal: controller.signal, cache: "no-cache" });
+    // Always try the network. A slow but working connection must not switch
+    // to the offline copy merely because a fixed timeout has elapsed.
+    const response = await fetch(request, { cache: "no-cache" });
     if (response.ok && response.type === "basic") {
       try {
         const cache = await caches.open(CACHE_NAME);
@@ -45,8 +44,6 @@ async function networkOrOfflineCopy(request, key) {
   } catch {
     const cached = await caches.match(key, { cacheName: CACHE_NAME });
     return cached || Response.error();
-  } finally {
-    clearTimeout(timeout);
   }
 }
 

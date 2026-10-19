@@ -1,6 +1,6 @@
 # Simple Tip Calculator
 
-A lightweight, mobile-friendly calculator made with plain HTML, CSS, and JavaScript. No installation, build, accounts, or external requests are needed.
+A lightweight, mobile-friendly calculator made with plain HTML, CSS, and JavaScript. No installation, build, or account is needed. Google Analytics measures public website visits; the calculator also works when Analytics is unavailable.
 
 ## Run locally
 
@@ -28,6 +28,7 @@ Money is calculated in integer cents. The percentage is retained as an exact fra
 - `pwa.js` and `manifest.webmanifest`: home-screen installation and device-specific instructions.
 - `sw.js`: saves public app files for offline use; online visits prefer fresh files.
 - `icons/`: prebuilt receipt icons for Android and Apple home screens.
+- `analytics.js`: loads Google Analytics on the public HTTPS domain with fixed page metadata and no calculator values.
 
 ## Home screen and offline use
 
@@ -36,6 +37,14 @@ Serve the site over HTTPS (or localhost for development). The Add to Home Screen
 After the first successful online load finishes saving the app files, the calculator and both policy pages work offline. Bill and tip values are not saved. External websites and support payments still require an internet connection. Browsers may evict cached files or restrict storage in private mode.
 
 The icons and manifest need no build step. When changing cached app files, increment `CACHE_NAME` in `sw.js` and keep `APP_FILES` complete. The worker precaches a complete version before activating, removes only obsolete calculator caches, and checks the network before using an offline copy. Keep hosting `sw.js` without a long-lived immutable cache header.
+
+Online visits always request fresh files, even if an offline copy exists. Cached files are used only when that network request fails; a slow connection has no artificial cutoff. Analytics loads independently of the source of the HTML, so an online visit using saved files can still be measured. Google scripts and collection requests are never stored or handled by the offline cache. No offline activity is stored for later upload.
+
+## Analytics
+
+Measurement ID: `G-0HBEB4V626`. The tag runs automatically on the public HTTPS domains only, with no consent popup. Localhost, direct-file use, and Vercel preview domains do not generate test traffic. The tag requests one page view per page load, normalizes URLs to known paths, removes query strings/fragments, limits referrers to their origins, and disables Google Signals and advertising-personalization signals. It does not read calculator values or attach calculator interaction events.
+
+The local Analytics bootstrap is saved for offline use; it skips the Google script when the browser reports offline, and can try again when connectivity returns. This does not make offline visits measurable. Ad blockers, browser privacy settings, disabled cookies, and unavailable Google services can also reduce reporting. Analytics errors never disable the calculator. The Privacy Policy describes these practices.
 
 ## Verify
 
@@ -48,7 +57,7 @@ node --test tests/calculator.test.cjs
 An optional browser test checks typing, display, keyboard, touch, validation, and mobile layout. In the prepared cloud environment, Playwright and Chromium are already available. With the local server running:
 
 ```sh
-node --test tests/browser.test.cjs tests/share.test.cjs tests/pwa.test.cjs
+node --test tests/browser.test.cjs tests/share.test.cjs tests/pwa.test.cjs tests/analytics.test.cjs
 ```
 
 For another machine, install Playwright separately and set `CHROMIUM_PATH` if your Chromium executable is elsewhere. The website itself has no package dependencies.
