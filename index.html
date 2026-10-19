@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#126b63">
+    <meta name="description" content="A simple, free tip calculator. Enter your bill, then adjust the tip percentage, tip amount, or total with easy whole-number steps.">
+    <title>Simple Tip Calculator</title>
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <script src="calculator.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header class="page-header">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M9 5h14v22l-3.5-2-3.5 2-3.5-2L9 27V5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M13 11h6m-6 5h6m-6 5h3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <h1>Simple Tip Calculator</h1>
+        <p>Adjust your tip, percentage, or total.<br class="desktop-break"> Everything updates instantly.</p>
+      </header>
+
+      <section class="calculator" aria-label="Tip calculator">
+        <div class="bill-section">
+          <label for="bill">Bill Amount</label>
+          <div class="bill-box">
+            <span class="currency" aria-hidden="true">$</span>
+            <input id="bill" type="text" inputmode="decimal" placeholder="e.g. 50.00" autocomplete="off" spellcheck="false" aria-describedby="bill-error" enterkeyhint="done">
+          </div>
+          <p id="bill-error" class="error" aria-live="polite"></p>
+        </div>
+
+        <div class="results">
+          <div class="result-row">
+            <button type="button" class="step-button" data-type="percent" data-direction="-1" aria-label="Decrease tip percentage" disabled><span class="triangle down" aria-hidden="true"></span></button>
+            <div class="result-text"><span id="percent-label" class="result-label">Tip Percentage</span><output id="percent" aria-labelledby="percent-label">20%</output></div>
+            <button type="button" class="step-button" data-type="percent" data-direction="1" aria-label="Increase tip percentage" disabled><span class="triangle up" aria-hidden="true"></span></button>
+          </div>
+          <div class="result-row">
+            <button type="button" class="step-button" data-type="tip" data-direction="-1" aria-label="Decrease tip amount" disabled><span class="triangle down" aria-hidden="true"></span></button>
+            <div class="result-text"><span id="tip-label" class="result-label">Tip Amount</span><output id="tip" aria-labelledby="tip-label">—</output></div>
+            <button type="button" class="step-button" data-type="tip" data-direction="1" aria-label="Increase tip amount" disabled><span class="triangle up" aria-hidden="true"></span></button>
+          </div>
+          <div class="result-row total-row">
+            <button type="button" class="step-button" data-type="total" data-direction="-1" aria-label="Decrease total including tip" disabled><span class="triangle down" aria-hidden="true"></span></button>
+            <div class="result-text"><span id="total-label" class="result-label">Total Including Tip</span><output id="total" aria-labelledby="total-label">—</output></div>
+            <button type="button" class="step-button" data-type="total" data-direction="1" aria-label="Increase total including tip" disabled><span class="triangle up" aria-hidden="true"></span></button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="explanation" aria-label="How to use the calculator">
+        <h2>A small step. A simple total.</h2>
+        <p>Enter your bill, then use the arrows to move a row down or up to the next whole dollar or percentage point. The other values update together, and your bill stays fixed.</p>
+        <p class="privacy-note">Just the numbers. No sign-up, no fuss.</p>
+      </aside>
+      <noscript><p class="noscript">Please enable JavaScript to use the calculator.</p></noscript>
+    </main>
+  </body>
+</html>
