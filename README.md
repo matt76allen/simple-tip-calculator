@@ -29,6 +29,13 @@ Money is calculated in integer cents. The percentage is retained as an exact fra
 - `sw.js`: saves public app files for offline use; online visits prefer fresh files.
 - `icons/`: prebuilt receipt icons for Android and Apple home screens.
 - `analytics.js`: loads Google Analytics on the public HTTPS domain with fixed page metadata and no calculator values.
+- `robots.txt` and `sitemap.xml`: allow crawling and list the three canonical public pages.
+
+## Search discovery
+
+Each page has a unique title, description, explicit indexing permission, and an HTTPS canonical URL without `www`. The homepage includes WebSite/WebApplication structured data describing the actual free calculator, plus social-sharing metadata using the existing receipt icon. No ratings or reviews are invented. All page text and legal links are available without JavaScript.
+
+In Google Search Console, verify the domain and submit `https://simpletipcalculator.com/sitemap.xml`. Use URL Inspection to request indexing of the homepage. Sitemap `lastmod` values should reflect actual page changes, not automatically change on each request. Indexing and rankings are search-engine decisions; these files make discovery possible rather than guaranteeing placement.
 
 ## Home screen and offline use
 
@@ -44,6 +51,8 @@ Online visits always request fresh files, even if an offline copy exists. Cached
 
 Measurement ID: `G-0HBEB4V626`. The tag runs automatically on the public HTTPS domains only, with no consent popup. Localhost, direct-file use, and Vercel preview domains do not generate test traffic. The tag requests one page view per page load, normalizes URLs to known paths, removes query strings/fragments, limits referrers to their origins, and disables Google Signals and advertising-personalization signals. It does not read calculator values or attach calculator interaction events.
 
+On visible pages, the external Google tag is scheduled after a rendering opportunity and during browser idle time, with a short maximum idle wait. It still loads automatically, without requiring a click. Google's external script remains a substantial part of the online JavaScript cost; local audits without that script do not predict a production PageSpeed score.
+
 The local Analytics bootstrap is saved for offline use; it skips the Google script when the browser reports offline, and can try again when connectivity returns. This does not make offline visits measurable. Ad blockers, browser privacy settings, disabled cookies, and unavailable Google services can also reduce reporting. Analytics errors never disable the calculator. The Privacy Policy describes these practices.
 
 ## Verify
@@ -57,7 +66,7 @@ node --test tests/calculator.test.cjs
 An optional browser test checks typing, display, keyboard, touch, validation, and mobile layout. In the prepared cloud environment, Playwright and Chromium are already available. With the local server running:
 
 ```sh
-node --test tests/browser.test.cjs tests/share.test.cjs tests/pwa.test.cjs tests/analytics.test.cjs
+node --test tests/browser.test.cjs tests/share.test.cjs tests/pwa.test.cjs tests/analytics.test.cjs tests/seo.test.cjs
 ```
 
 For another machine, install Playwright separately and set `CHROMIUM_PATH` if your Chromium executable is elsewhere. The website itself has no package dependencies.

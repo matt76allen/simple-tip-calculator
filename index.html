@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#126b63">
     <meta name="description" content="Use our free simple tip calculator to calculate your tip and total instantly. Enter your bill, then easily adjust the tip percentage, tip amount, or total.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="canonical" href="https://simpletipcalculator.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Simple Tip Calculator">
+    <meta property="og:title" content="Simple Tip Calculator">
+    <meta property="og:description" content="Calculate your tip and total instantly. Adjust the tip percentage, tip amount, or total with simple arrow controls. Free, with no account needed.">
+    <meta property="og:url" content="https://simpletipcalculator.com/">
+    <meta property="og:image" content="https://simpletipcalculator.com/icons/icon-512.png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+    <meta property="og:image:alt" content="Simple Tip Calculator receipt icon">
+    <meta name="twitter:card" content="summary">
     <title>Simple Tip Calculator</title>
     <link rel="icon" href="icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -18,6 +30,35 @@
     <script src="footer.js" defer></script>
     <script src="pwa.js" defer></script>
     <script src="analytics.js" defer></script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "@id": "https://simpletipcalculator.com/#website",
+            "url": "https://simpletipcalculator.com/",
+            "name": "Simple Tip Calculator",
+            "inLanguage": "en"
+          },
+          {
+            "@type": "WebApplication",
+            "@id": "https://simpletipcalculator.com/#calculator",
+            "url": "https://simpletipcalculator.com/",
+            "name": "Simple Tip Calculator",
+            "description": "A free tip calculator with adjustable tip percentage, tip amount, and total, plus offline support.",
+            "applicationCategory": "FinanceApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "JavaScript enabled",
+            "isAccessibleForFree": true,
+            "inLanguage": "en",
+            "isPartOf": { "@id": "https://simpletipcalculator.com/#website" },
+            "publisher": { "@type": "Organization", "name": "DPI Worldwide, LLC", "url": "https://dpiworldwide.com/" },
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <main>

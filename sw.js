@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "simple-tip-calculator-";
-const CACHE_NAME = `${CACHE_PREFIX}v2`;
+const CACHE_NAME = `${CACHE_PREFIX}v3`;
 // Cache only this explicit list of public files, never calculator values,
 // payment pages, or other external requests.
 const APP_FILES = [

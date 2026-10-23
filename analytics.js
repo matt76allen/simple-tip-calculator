@@ -57,9 +57,21 @@
     document.head.append(tag);
   }
 
-  window.addEventListener("online", loadAnalytics);
-  // A slow or blocked Google request must not delay the page's load event or
-  // the independent offline-cache setup that starts at that event.
-  if (document.readyState === "complete") loadAnalytics();
-  else window.addEventListener("load", loadAnalytics, { once: true });
+  function scheduleAnalytics() {
+    // Give the page a chance to paint before downloading/executing Google's
+    // larger script. Still load automatically, without requiring interaction.
+    if (document.visibilityState === "hidden") {
+      loadAnalytics();
+      return;
+    }
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if ("requestIdleCallback" in window) window.requestIdleCallback(loadAnalytics, { timeout: 1500 });
+      else setTimeout(loadAnalytics, 0);
+    }));
+  }
+
+  window.addEventListener("online", scheduleAnalytics);
+  // Google must not delay the load event or independent offline-cache setup.
+  if (document.readyState === "complete") scheduleAnalytics();
+  else window.addEventListener("load", scheduleAnalytics, { once: true });
 })();

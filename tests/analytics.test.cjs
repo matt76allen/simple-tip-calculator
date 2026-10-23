@@ -27,6 +27,22 @@ test('analytics sends only fixed page metadata and leaves the calculator indepen
   const mockGoogle = context => context.route('https://www.googletagmanager.com/**', route => route.fulfill({ contentType: 'text/javascript', body: 'window.googleTagLoaded = true;' }));
   const commands = page => page.evaluate(() => (window.dataLayer || []).map(command => [...command]));
   try {
+    await t.test('calculator is usable before the deferred Google script loads', () => scenario(async context => {
+      await mockGoogle(context);
+      await context.addInitScript(() => {
+        window.pendingAnalyticsIdle = [];
+        window.requestIdleCallback = callback => { window.pendingAnalyticsIdle.push(callback); };
+      });
+    }, async page => {
+      await page.goto(production);
+      await page.waitForFunction(() => window.pendingAnalyticsIdle.length > 0);
+      assert.equal(await page.locator('script[src*="googletagmanager.com"]').count(), 0);
+      await page.getByLabel('Bill Amount', { exact: true }).fill('50');
+      assert.equal(await page.locator('#total').textContent(), '$60.00');
+      await page.evaluate(() => window.pendingAnalyticsIdle.shift()());
+      await page.waitForFunction(() => window.googleTagLoaded === true);
+      assert.equal((await commands(page)).filter(command => command[0] === 'event').length, 1);
+    }));
     await t.test('correct ID, a single page view, sanitized URLs, and no bill/tip interaction events', () => scenario(mockGoogle, async page => {
       await page.goto(`${production}/?bill=123456.78&tip=91234.56#private-values`, { referer: 'https://example.com/private?bill=43210.99#details' });
       await page.waitForFunction(() => window.googleTagLoaded === true);

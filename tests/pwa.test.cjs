@@ -20,6 +20,7 @@ test('offline calculator and home-screen installation', async t => {
         await page.evaluate(async () => {
           await caches.open('simple-tip-calculator-v0');
           await caches.open('simple-tip-calculator-v1');
+          await caches.open('simple-tip-calculator-v2');
           await caches.open('unrelated-cache');
         });
         await page.goto(base);
@@ -34,6 +35,7 @@ test('offline calculator and home-screen installation', async t => {
         const names = await page.evaluate(() => caches.keys());
         assert.equal(names.includes('simple-tip-calculator-v0'), false);
         assert.equal(names.includes('simple-tip-calculator-v1'), false);
+        assert.equal(names.includes('simple-tip-calculator-v2'), false);
         assert.equal(names.includes('unrelated-cache'), true);
         const manifest = await page.evaluate(async () => (await fetch('manifest.webmanifest')).json());
         assert.equal(manifest.name, 'Simple Tip Calculator');
@@ -66,7 +68,7 @@ test('offline calculator and home-screen installation', async t => {
           await page.getByRole('link', { name: 'Back to Simple Tip Calculator' }).click();
         }
         const cached = await page.evaluate(async () => {
-          const cache = await caches.open('simple-tip-calculator-v2');
+          const cache = await caches.open('simple-tip-calculator-v3');
           return (await cache.keys()).map(request => new URL(request.url).pathname);
         });
         assert.equal(cached.length, 16);
